@@ -51,4 +51,54 @@ public class ChallengeController : ControllerBase
             return StatusCode(500, $"Ocurrio un error en el servidor: {ex.Message}");
         }
     }
+
+    [HttpGet("Activos")]
+    public IActionResult GetActives()
+    {
+        try
+        {
+            if (challenges.Count == 0)
+            {
+                return NotFound("No hay desafios registrados aun.");
+            }
+
+            var activeChallenges = challenges.Where(C => C.Status == true).ToList();
+            
+            if (activeChallenges.Count == 0)
+            {
+                return NotFound("No hay desafios activos.");
+            }
+
+            return Ok(activeChallenges);
+        }
+        catch(Exception ex)
+        {
+            return StatusCode(500, $"Ocurrio un error en el servidor: {ex.Message}");
+        }
+    }
+
+    [HttpGet("Dificultad")]
+    public IActionResult GetByDifficulty(string difficulty)
+    {
+        try
+        {
+            if (challenges.Count == 0)
+            {
+                return NotFound("No hay desafios registrados aun.");
+            }
+
+            var challengesDifficulty = challenges.Where(C => C.Difficulty == difficulty).ToList();
+
+            if(challengesDifficulty.Count == 0)
+            {
+                return NotFound("No hay desafios con dicha dificultad.");
+            }
+
+            return Ok(challengesDifficulty);
+        }
+        catch(Exception ex)
+        {
+            return StatusCode(500, $"Ocurrio un error en el servidor: {ex.Message}");
+        }
+    }
 }
